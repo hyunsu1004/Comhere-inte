@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 2px; /* 세로 스크롤 */
+    height: 2px; /* 가로 스크롤 (필요시) */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0; /* 선 색상 */
+    border-radius: 1px;
+}
