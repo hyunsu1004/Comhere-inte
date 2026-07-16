@@ -31,34 +31,34 @@
 
 ### 1. 인바디 스캔
 인바디 사진을 업로드하면 Gemini API가 키, 체중, 골격근량, 체지방률, BMI 등 필요한 수치를 자동으로 추출해 JSON 형태로 반환합니다.
+<img width="922" height="461" alt="image" src="https://github.com/user-attachments/assets/a5d89d4b-e4cd-4aa5-aa57-21c66c0f85aa" />
+
 
 ### 2. 체형 분류를 위한 사용자 군집화
 키·몸무게·체지방량·골격근량을 기준으로 8가지 체형으로 분류하고, 스캔된 인바디가 어떤 체형에 속하는지 파인튜닝된 LLM으로 판별합니다.
+<img width="1022" height="562" alt="image" src="https://github.com/user-attachments/assets/3405b41b-552d-40ca-befb-9391dc328293" />
+
 
 ### 3. 인바디 정보 등록 (블록체인)
 Gemini가 인바디를 스캔함과 동시에 해당 정보를 스마트 컨트랙트를 통해 블록체인에 트랜잭션으로 기록합니다.
+<img width="1055" height="585" alt="image" src="https://github.com/user-attachments/assets/bb4b0957-f9be-4aa9-b8db-09632d688de8" />
+
 
 ### 4~5. 사용자 목표치 설정 및 추천 (RAG)
 사용자가 목표 체형을 설정하면 목표치를 인코딩하여 BigQuery 벡터 DB에 저장하고, 코사인 유사도 계산을 통해 목표에 부합하며 인바디 변화 추이가 유사한 사용자를 Top 3까지 추천합니다.
+<img width="967" height="568" alt="image" src="https://github.com/user-attachments/assets/f55aa76f-b3bd-4a3d-a416-37f20cc2da3c" />
+
 
 ### 6. 블록체인 기반 사용자 간 거래
 사용자 간 운동 루틴·식단 정보를 거래할 때 블록체인의 탈중앙화 특성을 활용해 중개자 없는 P2P 거래를 지원합니다.
+<img width="1032" height="552" alt="image" src="https://github.com/user-attachments/assets/5b1fa03a-813b-45d9-b1cd-c046f79662e5" />
 
 ---
 
 ## 🏗️ 시스템 아키텍처
 
-```
-User → Telegram → React (Frontend VM)
-                     ↕
-              Spring Boot (Backend VM)
-              ├─ Ganache/Solidity/Remix (Block Chain Net)
-              ├─ Flask (추천·시각화 서버) ↔ Google BigQuery (Vector DB) / Gemini
-              ├─ MySQL (사용자·인바디·추천 데이터)
-              └─ Amazon S3 (파일 스토리지)
-                     ↕
-                  OpenAI (체형 분류 파인튜닝 모델)
-```
+<img width="820" height="418" alt="image" src="https://github.com/user-attachments/assets/0fe15831-abe3-4a73-8b40-1519daa7f550" />
+
 
 - **Telegram Mini App**: 별도 앱 설치 없이 Telegram 내에서 회원가입·로그인·채팅을 처리
 - **Spring Boot**: 전체 서비스의 중심으로 AI 분석 서버, DB, 블록체인, 파일 스토리지 간 연동을 조율
@@ -70,17 +70,7 @@ User → Telegram → React (Frontend VM)
 
 ## 🛠️ 기술 스택
 
-**Frontend**
-`TypeScript` `Vite` `React.js` `React Query / Recoil` `React Native` `Storybook` `Swiper` `Telegram WebApp`
-
-**Backend**
-`Java / Spring Boot` `Spring Data JPA / Hibernate` `MySQL` `Redis` `Docker` `Express.js(Node)`
-
-**AI / Data**
-`Google Gemini API` `OpenAI API (파인튜닝)` `LangChain / RAG` `Google BigQuery (Vector DB)` `Flask + Matplotlib`
-
-**Blockchain / Infra**
-`Solidity` `Ganache` `Remix` `Web3.js` `AWS S3`
+<img width="433" height="216" alt="image" src="https://github.com/user-attachments/assets/0be604eb-91c3-4e4c-b4f4-4af14fd41953" />
 
 ---
 
@@ -107,6 +97,8 @@ User → Telegram → React (Frontend VM)
 **문제**: 초기에는 일반 프롬프트만으로 LLM에 인바디 수치를 전달해 8가지 체형 중 하나로 분류하도록 했으나, 체형 경계가 모호한 케이스에서 오분류가 잦아 정확도가 약 **0.72** 수준에 머물렀습니다.
 
 **해결**: 수천 건의 인바디 데이터(키·체중·체지방률·골격근량 등)를 라벨링한 학습 데이터셋을 구축하고, **OpenAI GPT-4.1 mini 모델을 파인튜닝**했습니다. 그 결과 loss는 0.7 → 0.007로 감소했고, 분류 정확도는 **0.72 → 0.97**로 크게 향상되어 실제 서비스에 적용 가능한 수준의 신뢰도를 확보했습니다.
+<img width="1062" height="566" alt="OPENAI 파인튜닝" src="https://github.com/user-attachments/assets/7e3bfaf3-75a9-49ee-95a7-dbe3ba64fe65" />
+
 
 ### 3) 블록체인-DB 간 데이터 일관성 문제
 **문제**: 인바디 정보를 블록체인과 BigQuery(벡터 DB)에 각각 저장하는 이중 저장 구조에서, 두 저장소 간 데이터 값이 불일치할 가능성이 있었습니다.
